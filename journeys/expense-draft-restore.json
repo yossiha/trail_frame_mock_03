@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "0.1.0",
+  "contractId": "relay-expense-draft-restore",
+  "title": "Relay Finance — submit directly or restore a saved draft",
+  "baseUrl": "http://127.0.0.1:4183",
+  "scenarios": [
+    {
+      "scenarioId": "direct-submit",
+      "title": "Submit a complete claim directly",
+      "required": true,
+      "viewports": [
+        { "viewportId": "desktop", "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+        { "viewportId": "mobile", "width": 390, "height": 844, "deviceScaleFactor": 2 }
+      ],
+      "steps": [
+        { "stepId": "open", "title": "Open a new claim", "authoredStateId": "form", "action": { "kind": "navigate", "url": "http://127.0.0.1:4183/" }, "expectations": [{ "expectationId": "form", "required": true, "kind": "visible-text", "text": "Submit an expense without the spreadsheet." }] },
+        { "stepId": "amount", "title": "Enter amount", "authoredStateId": "form-amount", "action": { "kind": "type", "target": { "kind": "test-id", "value": "amount" }, "value": { "kind": "literal", "value": "27.80" } }, "expectations": [{ "expectationId": "meals", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "category-meals" } }] },
+        { "stepId": "category", "title": "Choose Meals", "authoredStateId": "form-category", "action": { "kind": "click", "target": { "kind": "test-id", "value": "category-meals" } }, "expectations": [{ "expectationId": "submit", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "submit-claim" } }] },
+        { "stepId": "submit", "title": "Submit the claim", "authoredStateId": "confirmed", "action": { "kind": "click", "target": { "kind": "test-id", "value": "submit-claim" } }, "expectations": [{ "expectationId": "confirmed", "required": true, "kind": "visible-text", "text": "Claim submitted" }] }
+      ]
+    },
+    {
+      "scenarioId": "save-and-restore-draft",
+      "title": "Save a Travel claim and restore every field",
+      "required": true,
+      "viewports": [
+        { "viewportId": "desktop", "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+        { "viewportId": "mobile", "width": 390, "height": 844, "deviceScaleFactor": 2 }
+      ],
+      "steps": [
+        { "stepId": "open", "title": "Open a new claim", "authoredStateId": "form", "action": { "kind": "navigate", "url": "http://127.0.0.1:4183/" }, "expectations": [{ "expectationId": "form", "required": true, "kind": "visible-text", "text": "Submit an expense without the spreadsheet." }] },
+        { "stepId": "amount", "title": "Enter draft amount", "authoredStateId": "form-amount", "action": { "kind": "type", "target": { "kind": "test-id", "value": "amount" }, "value": { "kind": "literal", "value": "42.50" } }, "expectations": [{ "expectationId": "travel", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "category-travel" } }] },
+        { "stepId": "category", "title": "Choose Travel", "authoredStateId": "form-category", "action": { "kind": "click", "target": { "kind": "test-id", "value": "category-travel" } }, "expectations": [{ "expectationId": "note", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "claim-note" } }] },
+        { "stepId": "note", "title": "Add draft note", "authoredStateId": "form-complete", "action": { "kind": "type", "target": { "kind": "test-id", "value": "claim-note" }, "value": { "kind": "literal", "value": "Airport train" } }, "expectations": [{ "expectationId": "save", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "save-draft" } }] },
+        { "stepId": "save", "title": "Save the draft", "authoredStateId": "draft-list", "action": { "kind": "click", "target": { "kind": "test-id", "value": "save-draft" } }, "expectations": [
+          { "expectationId": "saved", "required": true, "kind": "visible-text", "text": "Draft saved" },
+          { "expectationId": "draft-summary", "required": true, "kind": "visible-text", "text": "$42.50 · Travel" },
+          { "expectationId": "draft-note", "required": true, "kind": "visible-text", "text": "Airport train" }
+        ] },
+        { "stepId": "reopen", "title": "Reopen the saved draft", "authoredStateId": "restored-form", "action": { "kind": "click", "target": { "kind": "test-id", "value": "reopen-draft" } }, "expectations": [
+          { "expectationId": "restored-summary", "required": true, "kind": "visible-text", "text": "Restored draft: $42.50 · Travel" },
+          { "expectationId": "submit-restored", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "submit-claim" } }
+        ] },
+        { "stepId": "submit-restored", "title": "Submit the restored claim", "authoredStateId": "confirmed", "action": { "kind": "click", "target": { "kind": "test-id", "value": "submit-claim" } }, "expectations": [{ "expectationId": "confirmed", "required": true, "kind": "visible-text", "text": "Claim submitted" }] }
+      ]
+    }
+  ]
+}
