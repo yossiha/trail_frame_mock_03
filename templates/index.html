@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relay Expense Claims</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <strong>Relay Finance</strong>
+        <span>Expense claims</span>
+      </header>
+
+      {% if submitted %}
+        <section class="confirmation">
+          <div class="check">✓</div>
+          <p class="eyebrow">Claim RLY-442</p>
+          <h1>Claim submitted</h1>
+          <p>Your manager can now review the reimbursement request.</p>
+        </section>
+      {% else %}
+        <section class="layout">
+          <div class="intro">
+            <p class="eyebrow">New reimbursement</p>
+            <h1>Submit an expense without the spreadsheet.</h1>
+            <p>Enter the total, choose the reason, and send it to your manager.</p>
+          </div>
+
+          <form class="claim-card" action="/claims" method="post">
+            {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+
+            <label for="amount">Amount</label>
+            <div class="amount-field">
+              <span>$</span>
+              <input id="amount" data-testid="amount" name="amount" inputmode="decimal" value="{{ amount or '' }}" placeholder="84.20" required />
+            </div>
+
+            <fieldset class="categories">
+              <legend>Category</legend>
+              <label><input data-testid="category-travel" type="radio" name="category" value="travel" required /> Travel</label>
+              <label><input type="radio" name="category" value="meals" /> Meals</label>
+              <label><input type="radio" name="category" value="supplies" /> Office supplies</label>
+            </fieldset>
+
+            <label for="project-code">Project code <span class="optional">Optional</span></label>
+            <input id="project-code" data-testid="project-code" name="project_code" placeholder="e.g. ACME-24" />
+
+            <button data-testid="submit-claim" type="submit">Submit claim</button>
+          </form>
+        </section>
+      {% endif %}
+    </main>
+  </body>
+</html>
