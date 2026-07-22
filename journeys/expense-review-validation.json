@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "0.1.0",
+  "contractId": "relay-expense-review-validation",
+  "title": "Relay Finance — expense review and final validation",
+  "baseUrl": "http://127.0.0.1:4183",
+  "scenarios": [
+    {
+      "scenarioId": "simple-reviewed-claim",
+      "title": "Review and submit a simple travel claim",
+      "required": true,
+      "viewports": [
+        { "viewportId": "desktop", "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+        { "viewportId": "mobile", "width": 390, "height": 844, "deviceScaleFactor": 2 }
+      ],
+      "steps": [
+        { "stepId": "open", "title": "Open expense claim", "authoredStateId": "form", "action": { "kind": "navigate", "url": "http://127.0.0.1:4183/" }, "expectations": [{ "expectationId": "form", "required": true, "kind": "visible-text", "text": "Submit an expense without the spreadsheet." }] },
+        { "stepId": "amount", "title": "Enter amount", "authoredStateId": "form-amount", "action": { "kind": "type", "target": { "kind": "test-id", "value": "amount" }, "value": { "kind": "literal", "value": "84.20" } }, "expectations": [{ "expectationId": "travel", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "category-travel" } }] },
+        { "stepId": "category", "title": "Choose Travel", "authoredStateId": "form-category", "action": { "kind": "click", "target": { "kind": "test-id", "value": "category-travel" } }, "expectations": [{ "expectationId": "review-control", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "review-claim" } }] },
+        { "stepId": "review", "title": "Review the claim", "authoredStateId": "review", "action": { "kind": "click", "target": { "kind": "test-id", "value": "review-claim" } }, "expectations": [
+          { "expectationId": "ready", "required": true, "kind": "visible-text", "text": "Ready to submit." },
+          { "expectationId": "amount-review", "required": true, "kind": "visible-text", "text": "$84.20" }
+        ] },
+        { "stepId": "submit", "title": "Submit reviewed claim", "authoredStateId": "confirmed", "action": { "kind": "click", "target": { "kind": "test-id", "value": "submit-reviewed-claim" } }, "expectations": [{ "expectationId": "confirmed", "required": true, "kind": "visible-text", "text": "Claim submitted" }] }
+      ]
+    },
+    {
+      "scenarioId": "hyphenated-project-code",
+      "title": "Submit a reviewed claim using the documented project-code format",
+      "required": true,
+      "viewports": [
+        { "viewportId": "desktop", "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+        { "viewportId": "mobile", "width": 390, "height": 844, "deviceScaleFactor": 2 }
+      ],
+      "steps": [
+        { "stepId": "open", "title": "Open expense claim", "authoredStateId": "form", "action": { "kind": "navigate", "url": "http://127.0.0.1:4183/" }, "expectations": [{ "expectationId": "form", "required": true, "kind": "visible-text", "text": "Submit an expense without the spreadsheet." }] },
+        { "stepId": "amount", "title": "Enter amount", "authoredStateId": "form-amount", "action": { "kind": "type", "target": { "kind": "test-id", "value": "amount" }, "value": { "kind": "literal", "value": "184.20" } }, "expectations": [{ "expectationId": "travel", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "category-travel" } }] },
+        { "stepId": "category", "title": "Choose Travel", "authoredStateId": "form-category", "action": { "kind": "click", "target": { "kind": "test-id", "value": "category-travel" } }, "expectations": [{ "expectationId": "project", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "project-code" } }] },
+        { "stepId": "project-code", "title": "Enter documented project code", "authoredStateId": "form-project", "action": { "kind": "type", "target": { "kind": "test-id", "value": "project-code" }, "value": { "kind": "literal", "value": "ACME-24" } }, "expectations": [{ "expectationId": "note", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "claim-note" } }] },
+        { "stepId": "note", "title": "Add business note", "authoredStateId": "form-complete", "action": { "kind": "type", "target": { "kind": "test-id", "value": "claim-note" }, "value": { "kind": "literal", "value": "Client workshop travel" } }, "expectations": [{ "expectationId": "review-control", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "review-claim" } }] },
+        { "stepId": "review", "title": "Review project claim", "authoredStateId": "review", "action": { "kind": "click", "target": { "kind": "test-id", "value": "review-claim" } }, "expectations": [
+          { "expectationId": "ready", "required": true, "kind": "visible-text", "text": "Ready to submit." },
+          { "expectationId": "project-review", "required": true, "kind": "visible-text", "text": "ACME-24" },
+          { "expectationId": "note-review", "required": true, "kind": "visible-text", "text": "Client workshop travel" }
+        ] },
+        { "stepId": "submit", "title": "Submit reviewed project claim", "authoredStateId": "confirmed", "action": { "kind": "click", "target": { "kind": "test-id", "value": "submit-reviewed-claim" } }, "expectations": [{ "expectationId": "confirmed", "required": true, "kind": "visible-text", "text": "Claim submitted" }] }
+      ]
+    }
+  ]
+}
