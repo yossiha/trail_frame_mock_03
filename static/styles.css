@@ -1,0 +1,33 @@
+:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #271c33; background: #f5eef8; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input, select { font: inherit; }
+.shell { width: min(1040px, calc(100% - 30px)); margin: 0 auto; padding-bottom: 48px; }
+.topbar { display: flex; justify-content: space-between; padding: 26px 0; border-bottom: 1px solid #d9cce0; }
+.topbar span { color: #765f80; }
+.layout { display: grid; grid-template-columns: 1fr .82fr; gap: 56px; align-items: start; margin-top: 62px; }
+.intro { padding-top: 24px; }
+.eyebrow { margin: 0; text-transform: uppercase; letter-spacing: .15em; color: #8c5d9c; font-size: 12px; font-weight: 850; }
+h1 { margin: 10px 0 18px; font-size: clamp(48px, 7vw, 76px); line-height: .97; letter-spacing: -.06em; }
+.intro > p:last-child, .confirmation > p:last-child { color: #715f79; font-size: 18px; line-height: 1.6; }
+.claim-card { display: grid; gap: 10px; padding: 30px; border: 1px solid #dfd1e4; border-radius: 26px; background: #fffaff; box-shadow: 0 24px 60px rgba(75, 42, 88, .12); }
+.claim-card label { margin-top: 10px; font-weight: 800; }
+.optional { margin-left: 6px; color: #8c7b92; font-weight: 500; font-size: 13px; }
+input, select { width: 100%; border: 1px solid #cdbed3; border-radius: 13px; padding: 13px 14px; background: white; color: #271c33; }
+.amount-field { position: relative; }
+.amount-field span { position: absolute; left: 14px; top: 13px; color: #806c87; }
+.amount-field input { padding-left: 30px; }
+button { margin-top: 16px; border: 0; border-radius: 999px; padding: 15px 20px; color: white; background: #60336f; font-weight: 850; cursor: pointer; }
+.error { margin: 0; padding: 12px; border-radius: 12px; color: #7c2035; background: #fae5ea; }
+.confirmation { margin: 88px auto; max-width: 660px; text-align: center; padding: 58px; border-radius: 30px; background: #fffaff; }
+.check { width: 68px; height: 68px; margin: 0 auto 22px; border-radius: 50%; display: grid; place-items: center; background: #ead9ee; font-size: 32px; }
+.confirmation h1 { font-size: clamp(44px, 7vw, 68px); }
+.categories { margin: 10px 0 0; padding: 0; border: 0; display: grid; gap: 8px; }
+.categories legend { margin-bottom: 8px; font-weight: 800; }
+.categories label { display: flex; align-items: center; gap: 9px; margin: 0; padding: 11px 12px; border: 1px solid #d8cadd; border-radius: 12px; background: white; }
+.categories input { width: auto; }
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; margin-top: 28px; }
+  .intro h1 { font-size: 48px; }
+  .claim-card { padding: 22px; }
+}
