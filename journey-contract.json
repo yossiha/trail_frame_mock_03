@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "0.1.0",
+  "contractId": "relay-expense-claim",
+  "title": "Relay Finance — submit an expense claim",
+  "baseUrl": "http://127.0.0.1:4183",
+  "scenarios": [
+    {
+      "scenarioId": "submit-claim",
+      "title": "Submit a travel expense without a project code",
+      "required": true,
+      "viewports": [
+        { "viewportId": "desktop", "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+        { "viewportId": "mobile", "width": 390, "height": 844, "deviceScaleFactor": 2 }
+      ],
+      "steps": [
+        {
+          "stepId": "open-form",
+          "title": "Open the claim form",
+          "authoredStateId": "claim-form",
+          "action": { "kind": "navigate", "url": "http://127.0.0.1:4183/" },
+          "expectations": [
+            { "expectationId": "form-visible", "required": true, "kind": "visible-text", "text": "New reimbursement" }
+          ]
+        },
+        {
+          "stepId": "enter-amount",
+          "title": "Enter the claim amount",
+          "authoredStateId": "claim-form",
+          "action": {
+            "kind": "type",
+            "target": { "kind": "test-id", "value": "amount" },
+            "value": { "kind": "literal", "value": "84.20" }
+          },
+          "expectations": [
+            { "expectationId": "category-visible", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "category-travel" } }
+          ]
+        },
+        {
+          "stepId": "choose-category",
+          "title": "Choose travel",
+          "authoredStateId": "claim-form",
+          "action": { "kind": "click", "target": { "kind": "test-id", "value": "category-travel" } },
+          "expectations": [
+            { "expectationId": "submit-visible", "required": true, "kind": "visible-element", "target": { "kind": "test-id", "value": "submit-claim" } }
+          ]
+        },
+        {
+          "stepId": "submit",
+          "title": "Submit the claim",
+          "authoredStateId": "confirmation",
+          "action": { "kind": "click", "target": { "kind": "test-id", "value": "submit-claim" } },
+          "expectations": [
+            { "expectationId": "claim-confirmed", "required": true, "kind": "visible-text", "text": "Claim submitted" }
+          ]
+        }
+      ]
+    }
+  ]
+}
