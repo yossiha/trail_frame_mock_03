@@ -10,7 +10,10 @@
     <main class="shell">
       <header class="topbar">
         <strong>Relay Finance</strong>
-        <span>Expense claims</span>
+        <nav>
+          <a href="/">New claim</a>
+          <a href="/drafts">Drafts</a>
+        </nav>
       </header>
 
       {% if submitted %}
@@ -20,34 +23,69 @@
           <h1>Claim submitted</h1>
           <p>Your manager can now review the reimbursement request.</p>
         </section>
+      {% elif step == 'drafts' %}
+        <section class="drafts-shell">
+          <div class="drafts-heading">
+            <p class="eyebrow">Saved work</p>
+            <h1>Expense drafts</h1>
+            <p>Return to an unfinished claim without starting over.</p>
+          </div>
+
+          <div class="draft-list">
+            {% if saved %}<p class="success" role="status">Draft saved</p>{% endif %}
+            {% if draft %}
+              <article class="draft-card">
+                <div>
+                  <p class="eyebrow">{{ draft_id }}</p>
+                  <h2>${{ draft.amount }} · {{ draft.category|title }}</h2>
+                  <p>{{ draft.note or 'No note' }}</p>
+                </div>
+                <a data-testid="reopen-draft" href="/drafts/{{ draft_id }}">Reopen draft</a>
+              </article>
+            {% else %}
+              <p class="empty">No saved drafts yet.</p>
+            {% endif %}
+          </div>
+        </section>
       {% else %}
         <section class="layout">
           <div class="intro">
             <p class="eyebrow">New reimbursement</p>
             <h1>Submit an expense without the spreadsheet.</h1>
-            <p>Enter the total, choose the reason, and send it to your manager.</p>
+            <p>Send it now or save your progress and return from the drafts workspace.</p>
           </div>
 
           <form class="claim-card" action="/claims" method="post">
+            {% if restored %}
+              <p class="restore-banner" role="status">
+                Restored draft: ${{ amount }} · {{ category|title if category else 'Category missing' }}
+              </p>
+            {% endif %}
             {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
 
             <label for="amount">Amount</label>
             <div class="amount-field">
               <span>$</span>
-              <input id="amount" data-testid="amount" name="amount" inputmode="decimal" value="{{ amount or '' }}" placeholder="84.20" required />
+              <input id="amount" data-testid="amount" name="amount" inputmode="decimal" value="{{ amount or '' }}" placeholder="42.50" required />
             </div>
 
             <fieldset class="categories">
               <legend>Category</legend>
-              <label><input data-testid="category-travel" type="radio" name="category" value="travel" required /> Travel</label>
-              <label><input type="radio" name="category" value="meals" /> Meals</label>
-              <label><input type="radio" name="category" value="supplies" /> Office supplies</label>
+              <label><input data-testid="category-travel" type="radio" name="category" value="travel" {% if category == 'travel' %}checked{% endif %} required /> Travel</label>
+              <label><input data-testid="category-meals" type="radio" name="category" value="meals" {% if category == 'meals' %}checked{% endif %} /> Meals</label>
+              <label><input type="radio" name="category" value="supplies" {% if category == 'supplies' %}checked{% endif %} /> Office supplies</label>
             </fieldset>
 
             <label for="project-code">Project code <span class="optional">Optional</span></label>
-            <input id="project-code" data-testid="project-code" name="project_code" placeholder="e.g. ACME-24" />
+            <input id="project-code" data-testid="project-code" name="project_code" value="{{ project_code or '' }}" placeholder="e.g. ACME-24" />
 
-            <button data-testid="submit-claim" type="submit">Submit claim</button>
+            <label for="note">Business note <span class="optional">Optional</span></label>
+            <textarea id="note" data-testid="claim-note" name="note" placeholder="Airport train">{{ note or '' }}</textarea>
+
+            <div class="form-actions">
+              <button class="secondary" data-testid="save-draft" type="submit" formaction="/drafts">Save draft</button>
+              <button data-testid="submit-claim" type="submit">Submit claim</button>
+            </div>
           </form>
         </section>
       {% endif %}
