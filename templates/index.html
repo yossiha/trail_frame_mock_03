@@ -20,34 +20,64 @@
           <h1>Claim submitted</h1>
           <p>Your manager can now review the reimbursement request.</p>
         </section>
+      {% elif step == 'review' %}
+        <section class="review-shell">
+          <div class="review-heading">
+            <p class="eyebrow">Final review</p>
+            <h1>Ready to submit.</h1>
+            <p>Check the financial details before sending this claim to your manager.</p>
+          </div>
+
+          <div class="review-card">
+            {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+            <div class="review-row"><span>Amount</span><strong>${{ amount }}</strong></div>
+            <div class="review-row"><span>Category</span><strong>{{ category|title }}</strong></div>
+            <div class="review-row"><span>Project code</span><strong>{{ project_code or 'None' }}</strong></div>
+            <div class="review-row"><span>Note</span><strong>{{ note or 'None' }}</strong></div>
+
+            <form action="/claims/submit" method="post">
+              <input type="hidden" name="amount" value="{{ amount }}" />
+              <input type="hidden" name="category" value="{{ category }}" />
+              <input type="hidden" name="project_code" value="{{ project_code }}" />
+              <input type="hidden" name="note" value="{{ note }}" />
+              <div class="review-actions">
+                <a class="secondary-link" href="/">Start over</a>
+                <button data-testid="submit-reviewed-claim" type="submit">Submit claim</button>
+              </div>
+            </form>
+          </div>
+        </section>
       {% else %}
         <section class="layout">
           <div class="intro">
             <p class="eyebrow">New reimbursement</p>
             <h1>Submit an expense without the spreadsheet.</h1>
-            <p>Enter the total, choose the reason, and send it to your manager.</p>
+            <p>Enter the total, choose the reason, and review everything before it reaches your manager.</p>
           </div>
 
-          <form class="claim-card" action="/claims" method="post">
+          <form class="claim-card" action="/claims/review" method="post">
             {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
 
             <label for="amount">Amount</label>
             <div class="amount-field">
               <span>$</span>
-              <input id="amount" data-testid="amount" name="amount" inputmode="decimal" value="{{ amount or '' }}" placeholder="84.20" required />
+              <input id="amount" data-testid="amount" name="amount" inputmode="decimal" value="{{ amount or '' }}" placeholder="184.20" required />
             </div>
 
             <fieldset class="categories">
               <legend>Category</legend>
-              <label><input data-testid="category-travel" type="radio" name="category" value="travel" required /> Travel</label>
-              <label><input type="radio" name="category" value="meals" /> Meals</label>
-              <label><input type="radio" name="category" value="supplies" /> Office supplies</label>
+              <label><input data-testid="category-travel" type="radio" name="category" value="travel" {% if category == 'travel' %}checked{% endif %} required /> Travel</label>
+              <label><input data-testid="category-meals" type="radio" name="category" value="meals" {% if category == 'meals' %}checked{% endif %} /> Meals</label>
+              <label><input type="radio" name="category" value="supplies" {% if category == 'supplies' %}checked{% endif %} /> Office supplies</label>
             </fieldset>
 
             <label for="project-code">Project code <span class="optional">Optional</span></label>
-            <input id="project-code" data-testid="project-code" name="project_code" placeholder="e.g. ACME-24" />
+            <input id="project-code" data-testid="project-code" name="project_code" value="{{ project_code or '' }}" placeholder="e.g. ACME-24" />
 
-            <button data-testid="submit-claim" type="submit">Submit claim</button>
+            <label for="note">Business note <span class="optional">Optional</span></label>
+            <textarea id="note" data-testid="claim-note" name="note" placeholder="Client workshop travel">{{ note or '' }}</textarea>
+
+            <button data-testid="review-claim" type="submit">Review claim</button>
           </form>
         </section>
       {% endif %}
