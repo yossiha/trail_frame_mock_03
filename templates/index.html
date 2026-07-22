@@ -45,7 +45,8 @@
             </fieldset>
 
             <label for="project-code">Project code <span class="optional">Optional</span></label>
-            <input id="project-code" data-testid="project-code" name="project_code" placeholder="e.g. ACME-24" />
+            <input id="project-code" data-testid="project-code" name="project_code" placeholder="e.g. ACME-24" required aria-describedby="project-code-help" />
+            <small id="project-code-help">Required for submission</small>
 
             <button data-testid="submit-claim" type="submit">Submit claim</button>
           </form>
